@@ -73,9 +73,18 @@ app.post('/api/shorturl',(req,res,next)=>{
     }
     else
     {
-      Url.find().exec().then(data=>
+      Url.find({URL:bodyURL}).exec().then(data=>
         {
-          new Url({
+          if(data.length!==0)
+            {
+              res.json({
+                original_url: data[0].URL,
+                short_url: data[0].short
+              })
+            }
+          else
+          {
+            new Url({
             URL:bodyURL,
             short:short_url
           })
@@ -89,6 +98,7 @@ app.post('/api/shorturl',(req,res,next)=>{
           .catch(err => {
             res.json(err)
           })
+          }
         }
       )
     }
